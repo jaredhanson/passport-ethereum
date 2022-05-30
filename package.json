@@ -1,0 +1,51 @@
+{
+  "name": "passport-ethereum",
+  "version": "0.1.1",
+  "description": "Sign-In with Ethereum authentication strategy for Passport.",
+  "keywords": [
+    "passport",
+    "ethereum"
+  ],
+  "author": {
+    "name": "Jared Hanson",
+    "email": "jaredhanson@gmail.com",
+    "url": "https://www.jaredhanson.me/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jaredhanson/passport-ethereum.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jaredhanson/passport-ethereum/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/jaredhanson"
+  },
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  ],
+  "main": "./lib",
+  "dependencies": {
+    "oauth": "0.9.x",
+    "passport-strategy": "1.x.x"
+  },
+  "devDependencies": {
+    "chai": "2.x.x",
+    "chai-passport-strategy": "3.x.x",
+    "make-node": "0.3.x",
+    "mocha": "2.x.x",
+    "proxyquire": "^1.7.10",
+    "sinon": "^1.17.6"
+  },
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "scripts": {
+    "test": "mocha --require ./test/bootstrap/node --recursive"
+  }
+}
