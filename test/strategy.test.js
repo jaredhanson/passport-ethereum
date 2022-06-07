@@ -34,7 +34,7 @@ describe('Strategy', function() {
         };
         req.session = {
           messages: [],
-          ethereum: {
+          'ethereum:siwe': {
             nonce: 'VjglqeaSMDbPSYe0K'
           }
         };
