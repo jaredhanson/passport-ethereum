@@ -210,7 +210,7 @@ describe('Strategy', function() {
       .authenticate();
   }); // should fail when signature is invalid
   
-  it('should fail when message is malformed (missing message)', function(done) {
+  it('should fail when message is malformed (missing address)', function(done) {
     chai.passport.use(new Strategy(function(address, cb) {
       expect(address).to.equal('0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758');
       return cb(null, { id: '248289761001' });
@@ -238,13 +238,13 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Invalid message.' });
+        expect(challenge).to.deep.equal({ message: 'Malformed message.' });
         expect(status).to.equal(403);
         done();
       })
       .error(done)
       .authenticate();
-  }); // should fail when message is malformed (missing message)
+  }); // should fail when message is malformed (missing address)
   
   it('should fail when missing message', function(done) {
     chai.passport.use(new Strategy(function(address, cb) {
