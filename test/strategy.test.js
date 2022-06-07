@@ -80,13 +80,51 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'URI mismatch' });
+        expect(challenge).to.deep.equal({ message: 'URI mismatch.' });
         expect(status).to.equal(403);
         done();
       })
       .error(done)
       .authenticate();
   }); // should fail when URI is invalid
+  
+  it('should fail when message is expired', function(done) {
+    chai.passport.use(new Strategy(function(address, cb) {
+      expect(address).to.equal('0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758');
+      return cb(null, { id: '248289761001' });
+    }))
+      .request(function(req) {
+        req.connection = {};
+        req.headers.host = 'localhost:3000';
+        req.body = {
+          message: 'localhost:3000 wants you to sign in with your Ethereum account:\n' +
+            '0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758\n' +
+            '\n' +
+            'Sign in with Ethereum to the app.\n' +
+            '\n' +
+            'URI: http://localhost:3000\n' +
+            'Version: 1\n' +
+            'Chain ID: 1\n' +
+            'Nonce: GFRz6rD1XKFyYyQT\n' +
+            'Issued At: 2022-06-07T22:19:22.065Z\n' +
+            'Expiration Time: 2022-06-07T22:20:22.065Z',
+          signature: '0xc5050e9144943695d2ab233e3d5f205687e29735b07f4e99ef6738ff5512f249582c2b8c105c5c8b9cd9c7910e971765532a55071e0dfd2bbd13e931a024e4991c'
+        };
+        req.session = {
+          messages: [],
+          'ethereum:siwe': {
+            nonce: 'GFRz6rD1XKFyYyQT'
+          }
+        };
+      })
+      .fail(function(challenge, status) {
+        expect(challenge).to.deep.equal({ message: 'Expired message.' });
+        expect(status).to.equal(403);
+        done();
+      })
+      .error(done)
+      .authenticate();
+  }); // should fail when message is expired
   
   it('should fail when address is missing from message', function(done) {
     chai.passport.use(new Strategy(function(address, cb) {
@@ -116,7 +154,7 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Invalid message' });
+        expect(challenge).to.deep.equal({ message: 'Invalid message.' });
         expect(status).to.equal(403);
         done();
       })
@@ -139,7 +177,7 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Missing message' });
+        expect(challenge).to.deep.equal({ message: 'Missing message.' });
         expect(status).to.equal(400);
         done();
       })
@@ -171,7 +209,7 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Missing signature' });
+        expect(challenge).to.deep.equal({ message: 'Missing signature.' });
         expect(status).to.equal(400);
         done();
       })
