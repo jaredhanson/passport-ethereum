@@ -40,40 +40,42 @@ var SessionNonceStore = require('passport-ethereum-siwe').SessionNonceStore;
 
 var store = new SessionChallengeStore();
 
-passport.use(new EthereumStrategy({ store: store }, function verify(address, cb) {
-  db.get('SELECT * FROM blockchain_credentials WHERE chain = ? AND address = ?', [
-    'eip155:1',
-    address
-  ], function(err, row) {
-    if (err) { return cb(err); }
-    if (!row) {
-      db.run('INSERT INTO users (username) VALUES (?)', [
-        address
-      ], function(err) {
-        if (err) { return cb(err); }
-        var id = this.lastID;
-        db.run('INSERT INTO blockchain_credentials (user_id, chain, address) VALUES (?, ?, ?)', [
-          id,
-          'eip155:1',
+passport.use(new EthereumStrategy({ store: store },
+  function verify(address, cb) {
+    db.get('SELECT * FROM blockchain_credentials WHERE chain = ? AND address = ?', [
+      'eip155:1',
+      address
+    ], function(err, row) {
+      if (err) { return cb(err); }
+      if (!row) {
+        db.run('INSERT INTO users (username) VALUES (?)', [
           address
         ], function(err) {
           if (err) { return cb(err); }
-          var user = {
-            id: id,
-            username: address
-          };
-          return cb(null, user);
+          var id = this.lastID;
+          db.run('INSERT INTO blockchain_credentials (user_id, chain, address) VALUES (?, ?, ?)', [
+            id,
+            'eip155:1',
+            address
+          ], function(err) {
+            if (err) { return cb(err); }
+            var user = {
+              id: id,
+              username: address
+            };
+            return cb(null, user);
+          });
         });
-      });
-    } else {
-      db.get('SELECT rowid AS id, * FROM users WHERE rowid = ?', [ row.user_id ], function(err, row) {
-        if (err) { return cb(err); }
-        if (!row) { return cb(null, false); }
-        return cb(null, row);
-      });
-    }
-  });
-}));
+      } else {
+        db.get('SELECT rowid AS id, * FROM users WHERE rowid = ?', [ row.user_id ], function(err, row) {
+          if (err) { return cb(err); }
+          if (!row) { return cb(null, false); }
+          return cb(null, row);
+        });
+      }
+    });
+  }
+));
 ```
 
 #### Define Routes
