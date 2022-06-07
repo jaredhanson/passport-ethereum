@@ -5,6 +5,13 @@ var Strategy = require('../lib/strategy');
 
 describe('Strategy', function() {
   
+  var clock;
+  
+  afterEach(function() {
+    clock && clock.restore();
+  });
+  
+  
   it('should be named ethereum', function() {
     var strategy = new Strategy(function(){});
     
@@ -125,6 +132,46 @@ describe('Strategy', function() {
       .error(done)
       .authenticate();
   }); // should fail when message is expired
+  
+  it('should fail when message is not yet valid', function(done) {
+    clock = sinon.useFakeTimers(1654640839635);
+    
+    chai.passport.use(new Strategy(function(address, cb) {
+      expect(address).to.equal('0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758');
+      return cb(null, { id: '248289761001' });
+    }))
+      .request(function(req) {
+        req.connection = {};
+        req.headers.host = 'localhost:3000';
+        req.body = {
+          message: 'localhost:3000 wants you to sign in with your Ethereum account:\n' +
+            '0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758\n' +
+            '\n' +
+            'Sign in with Ethereum to the app.\n' +
+            '\n' +
+            'URI: http://localhost:3000\n' +
+            'Version: 1\n' +
+            'Chain ID: 1\n' +
+            'Nonce: uri9Uq8fydQXUDHx\n' +
+            'Issued At: 2022-06-07T22:27:19.635Z\n' +
+            'Not Before: 2022-06-07T22:28:19.635Z',
+          signature: '0x045404ec50df21499be5fdecbb334504070b767f75e3692a62806033d5e2e6ae70a2b13011ca34af0284b48b394994da2aeea73fe05f8fc1836e66db3f1b27521b'
+        };
+        req.session = {
+          messages: [],
+          'ethereum:siwe': {
+            nonce: 'uri9Uq8fydQXUDHx'
+          }
+        };
+      })
+      .fail(function(challenge, status) {
+        expect(challenge).to.deep.equal({ message: 'Message not yet valid.' });
+        expect(status).to.equal(403);
+        done();
+      })
+      .error(done)
+      .authenticate();
+  }); // should fail when message is not yet valid
   
   it('should fail when address is missing from message', function(done) {
     chai.passport.use(new Strategy(function(address, cb) {
