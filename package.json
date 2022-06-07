@@ -1,7 +1,7 @@
 {
   "name": "passport-ethereum-eip4361",
   "version": "0.1.1",
-  "description": "Sign-In with Ethereum authentication strategy for Passport.",
+  "description": "Ethereum authentication strategy for Passport.",
   "keywords": [
     "passport",
     "ethereum"
