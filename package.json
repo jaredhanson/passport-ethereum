@@ -1,5 +1,5 @@
 {
-  "name": "passport-ethereum-eip4361",
+  "name": "passport-ethereum-siwe",
   "version": "0.1.1",
   "description": "Ethereum authentication strategy for Passport.",
   "keywords": [
