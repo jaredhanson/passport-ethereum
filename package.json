@@ -32,8 +32,8 @@
   "main": "./lib",
   "dependencies": {
     "passport-strategy": "1.x.x",
-    "siwe": "^1.1.6",
-    "uid2": "^1.0.0"
+    "rand-token": "^1.0.1",
+    "siwe": "^1.1.6"
   },
   "devDependencies": {
     "chai": "2.x.x",
