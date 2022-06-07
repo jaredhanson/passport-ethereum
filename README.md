@@ -83,10 +83,9 @@ passport.use(new EthereumStrategy({ store: store },
 Two routes are needed in order to allow users to log in with their Ethereum
 wallet.
 
-The first route generates a randomized challenge, saves it in the
-`ChallengeStore`, and sends it to the client-side JavaScript for it to be
-included in the signed message.  This is necessary in order to protect against
-replay attacks.
+The first route generates a randomized nonce, saves it in the `NonceStore`, and
+sends it to the client-side JavaScript for it to be included in the signed
+message.  This is necessary in order to protect against replay attacks.
 
 ```js
 router.post('/login/ethereum/challenge', function(req, res, next) {
