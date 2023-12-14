@@ -282,7 +282,7 @@ describe('Strategy', function() {
         };
       })
       .fail(function(challenge, status) {
-        expect(challenge).to.deep.equal({ message: 'Invalid signature.: 0x09967aCB4912a3efDb66039b8BC8ABb202a0f3E4 !== 0xCC6F4DF4B758C4DE3203e8842E2d8CAc564D7758' });
+        expect(challenge).to.deep.equal({ message: 'Signature does not match address of the message.' });
         expect(status).to.equal(403);
         done();
       })

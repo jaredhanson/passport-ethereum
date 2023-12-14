@@ -33,7 +33,7 @@
   "dependencies": {
     "passport-strategy": "1.x.x",
     "rand-token": "^1.0.1",
-    "siwe": "^1.1.6"
+    "siwe": "^2.1.4"
   },
   "devDependencies": {
     "chai": "2.x.x",
